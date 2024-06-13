@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<h1 class="text-title">ДОГОВОР ОФФЕРТЫ</h1>
+<div class="article-content" id="offert">
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            fetch("{% static 'files/offert.txt' %}")
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById('offert').innerText = text;
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+    <title>Бот-поддержка DaniyalShop</title>
+{% endblock %}
+
+{% block content %}
+
+<audio id="notificationSound" src="{% static 'sound/messsage.mp3' %}"></audio>
+
+<div id="chat-container">
+    <h2>Бот-поддержка</h2>
+    <div id="chat-messages"></div>
+    <div id="quickQuestions">
+        <p><button class="quickQuestionBtn">Как сделать заказ?</button></p>
+        <p><button class="quickQuestionBtn">Как оплатить заказ?</button></p>
+        <p><button class="quickQuestionBtn">Как вернуть товар?</button></p>
+        <p><button class="quickQuestionBtn">Как подобрать размер?</button></p>
+        <p><button class="quickQuestionBtn">Как проверить товар?</button></p>
+    </div>
+    <form id="questionForm">
+        <label for="questionInput"></label><input type="text" id="questionInput" name="question" placeholder="Введите ваш вопрос">
+        <button type="submit" id="questionSubmitBtn">Отправить</button>
+    </form>
+    </div>
+
+{% block script %}
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block style %}
+{% endblock %}
+{% block title %}
+    <title>Сброс пароля DaniyalShop</title>
+{% endblock %}
+{% block content %}
+    <div class="register-up">
+    <h1 class="register-h1">Восстановление пароля</h1>
+    <h4 class="register-h4">Если вы забыли пароль, введите логин.</h4>
+    </div>
+
+<div id="forgot" class="forgot">
+    <form id="forget-form" method="post">
+        {% csrf_token %}
+        <label for="username">Логин или email *</label>
+        <input type="text" name="username">
+        * - обязательные поля
+        <button type="submit" name="action" value="register" class="regiButton">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+    </form>
+</div>
+{% endblock %}

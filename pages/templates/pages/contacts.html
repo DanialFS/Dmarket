@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<h1 class="text-title" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">КОНТАКТЫ</h1>
+
+    <div class="article-content" id="offert">
+    </div>
+
+    <form>
+        <input type="text"Напишите свою проблему>
+        <input type="text"Опишите вашу проблему>
+    </form>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            fetch("{% static 'files/contacts.txt' %}")
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById('offert').innerText = text;
+            });
+        });
+    </script>
+{% endblock %}

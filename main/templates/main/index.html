@@ -1,0 +1,115 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}<title>Главная страница DaniyalShop</title>{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+<div class="banner">
+    <img class='img-banner' src="{% static 'img/Banner.gif' %}">
+</div>
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+<div class="container-name">
+<h1 class="left">КРОССОВКИ</h1>
+<h2 class="right"><a href="{% url 'product_list' %}">ВСЕ МОДЕЛИ<img src="{% static 'img/north3.png' %}"></a></h2>
+</div>
+<div class="product-container">
+    {% for product in category_products.krossovki %}
+        <div class="product">
+            <a href="{% url 'product_page' product.id %}">
+            <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+            <h2>{{ product.name }}</h2>
+            {% if product.old_price %}
+                    <h3 style="color: red">{{ product.price }} &#8376;</h3>
+                    <h3><s>{{ product.old_price }} &#8376;</s></h3>
+                {% else %}
+                    <h3>{{ product.price }} &#8376;</h3>
+                {% endif %}
+            </a>
+        </div>
+    {% endfor %}
+</div>
+<div class="container-name">
+  <h1 class="left">КЕДЫ</h1>
+  <h2 class="right"><a href="{% url 'product_list' %}">ВСЕ МОДЕЛИ<img src="{% static 'img/north3.png' %}"></a></h2>
+</div>
+
+<div class="product-container">
+    {% for product in category_products.kedy %}
+        <div class="product">
+            <a href="{% url 'product_page' product.id %}">
+                <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                <h2>{{ product.name }}</h2>
+                {% if product.old_price %}
+                    <h3 style="color: red">{{ product.price }} &#8376;</h3>
+                    <h3><s>{{ product.old_price }} &#8376;</s></h3>
+                {% else %}
+                    <h3>{{ product.price }} &#8376;</h3>
+                {% endif %}
+            </a>
+        </div>
+    {% endfor %}
+</div>
+<div class="container-name">
+<h1 class="left">СПОРТИВНАЯ ОБУВЬ</h1>
+<h2 class="right"><a href="{% url 'product_list' %}">ВСЕ МОДЕЛИ<img src="{% static 'img/north3.png' %}"></a></h2>
+</div>
+<div class="product-container">
+    {% for product in category_products.basketbolnye_krossovki %}
+        <div class="product">
+            <a href="{% url 'product_page' product.id %}">
+                <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                <h2>{{ product.name }}</h2>
+               {% if product.old_price %}
+                    <h3 style="color: red">{{ product.price }} &#8376;</h3>
+                    <h3><s>{{ product.old_price }} &#8376;</s></h3>
+                {% else %}
+                    <h3>{{ product.price }} &#8376;</h3>
+                {% endif %}
+            </a>
+        </div>
+    {% endfor %}
+</div>
+<div class="container-name">
+<h1 class="left">АКСЕССУАРЫ</h1>
+<h2 class="right"><a href="{% url 'product_list' %}">ВСЕ МОДЕЛИ<img src="{% static 'img/north3.png' %}"></a></h2>
+</div>
+<div class="product-container">
+    {% for product in category_products.accessory %}
+        <div class="product">
+            <a href="{% url 'product_page' product.id %}">
+                <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                <h2>{{ product.name }}</h2>
+                {% if product.old_price %}
+                    <h3 style="color: red">{{ product.price }} &#8376;</h3>
+                    <h3><s>{{ product.old_price }} &#8376;</s></h3>
+                {% else %}
+                    <h3>{{ product.price }} &#8376;</h3>
+                {% endif %}
+            </a>
+        </div>
+    {% endfor %}
+</div>
+<div class="container-name">
+<h1 class="left">ОДЕЖДА</h1>
+<h2 class="right"><a href="{% url 'product_list' %}">ВСЕ МОДЕЛИ<img src="{% static 'img/north3.png' %}"></a></h2>
+</div>
+<div class="product-container">
+    {% for product in category_products.cloth %}
+        <div class="product">
+            <a href="{% url 'product_page' product.id %}">
+            <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+            <h2>{{ product.name }}</h2>
+            </a>
+            {% if product.old_price %}
+                    <h3 style="color: red">{{ product.price }} &#8376;</h3>
+                    <h3><s>{{ product.old_price }} &#8376;</s></h3>
+                {% else %}
+                    <h3>{{ product.price }} &#8376;</h3>
+                {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block script %}{% endblock %}

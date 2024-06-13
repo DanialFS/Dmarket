@@ -1,0 +1,138 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Title of the Child Template{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <style>
+        canvas { display: block; }
+        body { margin: 0; overflow: hidden; }
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+    <div id="controls">
+        <label for="hair">Hair Style:</label>
+        <select id="hair">
+            <option value="path/to/hair1.obj">Style 1</option>
+            <option value="path/to/hair2.obj">Style 2</option>
+        </select><br><br>
+
+        <label for="skinColor">Skin Color:</label>
+        <input type="color" id="skinColor" value="#ffcc99"><br><br>
+
+        <label for="height">Height:</label>
+        <input type="range" id="height" min="1.5" max="2" step="0.01" value="1.75">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+    <script>
+        let scene, camera, renderer, controls, baseModel, hairModel;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(0, 1, 1).normalize();
+            scene.add(directionalLight);
+
+            camera.position.z = 5;
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; // Включение демпфирования (инерции)
+            controls.dampingFactor = 0.25;
+            controls.enableZoom = true;
+
+            loadBaseModel();
+            animate();
+        }
+
+        function loadBaseModel() {
+            const loader = new THREE.OBJLoader();
+            loader.load('{% static 'img/FinalBaseMesh.obj' %}', function (object) {
+                baseModel = object;
+                baseModel.scale.set(0.2, 0.2, 0.2);
+                baseModel.position.set(0, -1, 0);
+                scene.add(baseModel);
+            }, undefined, function (error) {
+                console.error('An error happened while loading the model:', error);
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update(); // Обновляем управление на каждом кадре
+            renderer.render(scene, camera);
+        }
+
+        function setSkinColor(color) {
+            if (!baseModel) return;
+            baseModel.traverse(function (child) {
+                if (child.isMesh) {
+                    child.material.color.set(color);
+                }
+            });
+        }
+
+        function setHeight(height) {
+            if (!baseModel) return;
+            baseModel.scale.set(0.01, 0.01 * height, 0.01);
+        }
+
+        function loadHairModel(hairPath) {
+            const loader = new THREE.OBJLoader();
+            loader.load(hairPath, function (object) {
+                if (hairModel) {
+                    scene.remove(hairModel);
+                }
+                hairModel = object;
+                hairModel.scale.set(0.01, 0.01, 0.01);
+                baseModel.add(hairModel);
+            }, undefined, function (error) {
+                console.error('An error happened while loading the hair model:', error);
+            });
+        }
+
+        document.getElementById('hair').addEventListener('change', function (event) {
+            const hairPath = event.target.value;
+            loadHairModel(hairPath);
+        });
+
+        document.getElementById('skinColor').addEventListener('input', function (event) {
+            const color = event.target.value;
+            setSkinColor(color);
+        });
+
+        document.getElementById('height').addEventListener('input', function (event) {
+            const height = parseFloat(event.target.value);
+            setHeight(height);
+        });
+
+        window.addEventListener('resize', function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        init();
+    </script>
+{% endblock %}

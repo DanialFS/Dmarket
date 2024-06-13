@@ -1,0 +1,50 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block style %}
+{% endblock %}
+{% block title %}
+    <title>Профиль DaniyalShop</title>
+{% endblock %}
+{% block content %}
+<div class="profile-container">
+    <div class="profile-details">
+        <h1>ПРИВЕТ, {{ user.username|upper }}</h1>
+        <p>ТВОЙ MEMBER ID</p>
+        <div class="qr-code">
+                <img src="{{ qr_code_url }}" alt="QR Code">
+                <p>Сканируй в магазинах DaniyalShop.</p>
+        </div>
+        <div class="coupons">
+            <h2>ТВОИ КУПОНЫ</h2>
+            {% if promo_codes %}
+                    {% for promo in promo_codes %}
+                        {{ promo.code }} - {{ promo.description }} (действителен до {{ promo.expiration_date }})</li>
+                    {% endfor %}
+            {% else %}
+                <p>Нет дополнительных промокодов.</p>
+            {% endif %}
+            <br>
+            <br>
+            <a href="#">Узнать больше</a>
+        </div>
+    </div>
+    <div class="profile-sidebar">
+        <h3>ЛИЧНЫЙ КАБИНЕТ</h3>
+        <p><a href="">Личные данные</a></p>
+        <p><a href="#">История заказов</a></p>
+        <p><a href="#">Адреса доставок</a></p>
+        <p><a href="{% url 'cart_detail' %}">Корзина товаров</a></p>
+        <p><a href="{% url 'logout' %}">Выйти из аккаунта</a></p>
+        <hr>
+        <div class="help-section">
+            <h3>НУЖНА ПОМОЩЬ?</h3>
+            <p><a href="#footer">Контакты</a></p>
+            <p><a href="#footer">Доставка</a></p>
+            <p><a href="#footer">Возврат</a></p>
+        </div>
+    </div>
+</div>
+    {% block content_list %}
+
+    {% endblock %}
+{% endblock %}

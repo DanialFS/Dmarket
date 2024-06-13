@@ -1,0 +1,96 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}{{ category.name }} DaniyalShop{% endblock %}
+{% block content %}
+<div class="filter-column">
+    <div class="sort-filter-buttons">
+        {% if category %}
+        <h1>{{ category.name }}</h1>
+            {% else %}
+        <h1>ВСЕ МОДЕЛИ</h1>
+        {% endif %}
+        <form method="get" id="sort-form">
+            {{ form.sort }}
+        </form>
+        <button id="filter-button">Показать фильтры</button>
+    </div>
+   <div id="filter-options" class="filter-options">
+    <form method="GET" id="filter-form">
+        {{ form.brand }}
+        {{ form.color }}
+        {{ form.min_price }}
+        {{ form.max_price }}
+        {{ form.search }}
+    </form>
+</div>
+
+</div>
+<div class="product-container">
+    {% for product in products %}
+        <div class="product">
+            <a href="{% url 'product_page' product.id %}">
+                <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                <h2>{{ product.name }}</h2>
+                {% if product.old_price %}
+                    <h4 style="color: red">{{ product.price }} &#8376;</h4>
+                    <h4><s>{{ product.old_price }} &#8376;</s></h4>
+                {% else %}
+                    <h4>{{ product.price }} &#8376;</h4>
+                {% endif %}
+            </a>
+        </div>
+    {% endfor %}
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var filterButton = document.getElementById('filter-button');
+    var filterOptions = document.getElementById('filter-options');
+    var sortForm = document.getElementById('sort-form');
+    var filterForm = document.getElementById('filter-form');
+
+    // Показываем или скрываем блок фильтров при клике на кнопку
+    filterButton.addEventListener('click', function() {
+        if (filterOptions.style.display === 'block') {
+            filterOptions.style.display = 'none';
+            filterButton.classList.remove('active');
+        } else {
+            filterOptions.style.display = 'block';
+            filterButton.classList.add('active');
+        }
+    });
+
+    // Обработчик для формы сортировки
+    sortForm.addEventListener('change', function(event) {
+        event.preventDefault(); // Отменяем стандартное поведение формы
+        sortForm.submit();
+    });
+
+    // Обработчик для формы фильтров
+    filterForm.addEventListener('change', function(event) {
+        event.preventDefault(); // Отменяем стандартное поведение формы
+        filterForm.submit();
+    });
+
+    // Восстанавливаем состояние блока с фильтрами при загрузке страницы
+    var isFilterOptionsVisible = localStorage.getItem('filterOptionsVisible');
+    if (isFilterOptionsVisible === 'true') {
+        filterOptions.style.display = 'block';
+        filterButton.classList.add('active');
+    } else {
+        filterOptions.style.display = 'none';
+        filterButton.classList.remove('active');
+    }
+
+    // Сохраняем состояние блока с фильтрами при клике на кнопку
+    filterButton.addEventListener('click', function() {
+        if (filterOptions.style.display === 'block') {
+            localStorage.setItem('filterOptionsVisible', 'false');
+        } else {
+            localStorage.setItem('filterOptionsVisible', 'true');
+        }
+    });
+});
+
+</script>
+
+{% endblock %}

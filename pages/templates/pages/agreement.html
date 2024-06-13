@@ -1,0 +1,18 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<h1 class="text-title">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h1>
+
+    <div class="article-content" id="offert">
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            fetch("{% static 'files/agreement.txt' %}")
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById('offert').innerText = text;
+            });
+        });
+    </script>
+{% endblock %}

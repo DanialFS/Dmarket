@@ -1,0 +1,180 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block style %}
+{% endblock %}
+{% block title %}
+<title>{{ product.name }}</title>
+{% endblock %}
+{% block content %}
+<div class="main-column">
+<div class="left-column">
+<img id="mainImage" class="main-image" src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+    <div class="thumbnails-container">
+        {% for image in product.images.all %}
+        <img class="thumbnail" src="{{ image.image.url }}" alt="{{ product.name }}">
+        {% endfor %}
+    </div>
+    <div class="half-container">
+        <div class="left-half">
+            <h1>{{ product.name }}</h1>
+            <p>{{ product.description }}</p>
+        </div>
+        <div class="right-half">
+            <img src="{{ product.images.first.image.url }}">
+        </div>
+    </div>
+</div>
+
+<div class="right-column">
+    <h4>{{ product.category }}</h4>
+    <h1>{{ product.name }}</h1>
+    {% if product.old_price %}
+       <h2 style="color: red">{{ product.price }} &#8376;</h2>
+       <h2><s>{{ product.old_price }} &#8376;</s></h2>
+        {% else %}
+            <h2>{{ product.price }} &#8376;</h2>
+    {% endif %}
+   {% for color in product.colors.all %}
+            {{ color.name }}{% if not forloop.last %} / {% endif %}
+   {% endfor %}
+   <h5>ВНИМАНИЕ! ДОСТУПНЫЕ РАЗМЕРЫ УКАЗАНЫ ПО ШКАЛЕ KZ</h5>
+   <h4>Используй таблицу размеров, чтобы сверить размер по длине стопы</h4>
+   <h5>Выбрать размер</h5>
+   <div class="size-selector">
+        <table>
+             {% for size in sizes %}
+             <td class="size-option">{{ size.name }}</td>
+             {% endfor %}
+        </table>
+    </div>
+    <a href="/" class="size-table-link" id="openTable"> Таблица размеров
+    <img src="{% static 'img/lineika.png' %}" alt="Линейка" class="icon"> </a>
+    <form action="{% url 'add_to_cart' product.id %}" method="post">
+    {% csrf_token %}
+    <button class="add-to-cart" data-product-id="{{ product.id }}">Добавить в корзину</button>
+    </form>
+</div>
+<div class="under-banner">
+    <h1>ПОДПИШИСЬ НА НОВОСТИ И ПОЛУЧИ СКИДКУ -10%</h1>
+</div>
+
+<div class="also-buy">
+    <h2>С ЭТИМ ТОВАРОМ ТАКЖЕ ПОКУПАЮТ</h2>
+    <div class="product-container">
+        {% for product in related_products %}
+            <div class="product">
+                <a href="{% url 'product_page' product.id %}">
+                    <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                    <h2>{{ product.name }}</h2>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="also-buy">
+    <h2>ПОХОЖИЕ ТОВАРЫ</h2>
+    <div class="product-container">
+        {% for product in related_products %}
+            <div class="product">
+                <a href="{% url 'product_page' product.id %}">
+                    <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                    <h2>{{ product.name }}</h2>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</div>
+<script>
+
+
+    window.addEventListener('scroll', function() {
+    var leftColumn = document.querySelector('.left-column');
+    var rightColumn = document.querySelector('.right-column');
+    var threshold = window.innerHeight * 0.45
+    var scrollPosition = window.pageYOffset;
+
+    if (scrollPosition >= threshold) {
+        rightColumn.style.transition = 'all 1s ease';
+        rightColumn.style.position = 'absolute';
+        rightColumn.style.top = '0';
+    } else {
+        // Возвращение к фиксированной позиции
+        rightColumn.style.transition = 'all 1s ease';
+        rightColumn.style.position = 'fixed';
+        rightColumn.style.top = '0';
+    }
+});
+
+
+        const mainImage = document.getElementById('mainImage');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        let currentIndex = 0;
+
+        thumbnails.forEach((thumbnail, index) => {
+            thumbnail.addEventListener('click', () => {
+                currentIndex = index;
+                mainImage.src = thumbnail.src;
+            });
+        });
+
+        function showImage(index) {
+            currentIndex = index;
+            mainImage.src = thumbnails[index].src;
+        }
+
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+            showImage(currentIndex);
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % thumbnails.length;
+            showImage(currentIndex);
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+                showImage(currentIndex);
+            } else if (event.key === 'ArrowRight') {
+                currentIndex = (currentIndex + 1) % thumbnails.length;
+                showImage(currentIndex);
+            }
+        });
+        var modal = document.getElementById("TableModal");
+
+    // Получаем ссылку на кнопку открытия модального окна
+    var openButton = document.getElementById("openTable");
+
+    // Получаем ссылку на кнопку закрытия модального окна
+    var closeButton = document.querySelector(".close");
+
+    // Функция открытия модального окна
+    function openModal() {
+        modal.style.display = "block";
+    }
+
+    // Функция закрытия модального окна
+    function closeModal() {
+        modal.style.display = "none";
+    }
+
+    // Открываем модальное окно при клике на кнопку открытия
+    openButton.addEventListener("click", openModal);
+
+    // Закрываем модальное окно при клике на кнопку закрытия
+    closeButton.addEventListener("click", closeModal);
+
+    // Закрываем модальное окно при клике вне его области
+    window.addEventListener("click", function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    });
+</script>
+
+
+{% endblock %}

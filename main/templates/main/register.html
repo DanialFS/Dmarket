@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block style %}
+{% endblock %}
+{% block title %}
+    <title>Регистрация DaniyalShop</title>
+{% endblock %}
+{% block content %}
+    <div class="register-up">
+    <h1 class="register-h1">Регистрация</h1>
+    <h4 class="register-h4">Зарегистрируйтесь, чтобы использовать все возможности личного кабинета: отслеживание заказов, настройку подписки, связи с социальными сетями и другие. Мы никогда и ни при каких условиях не разглашаем личные данные клиентов.
+        Контактная информация будет использована только для оформления заказов и более удобной работы с сайтом.</h4>
+    </div>
+
+
+<div id="register" class="register">
+    <form id="registration-form" method="post">
+        {% csrf_token %}
+        <label for="name">Имя пользователя</label>
+        <input type="text" id="name" name="username">
+        <label for="email">E-mail *</label>
+        <input type="email" id="email" name="email" required>
+        <label for="phone">Телефон</label>
+        <input type="tel" id="phone" name="phone">
+        <label for="password">Пароль *</label>
+        <label>
+            <input type="password" name="password">
+        </label>
+        <label for="confirmPassword">Подтверждение пароля *</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <label for="code">Введите код *</label>
+        <input type="text" id="code" name="code" required>
+        <label for="agree">Я согласен на обработку персональных данных</label>
+        * - обязательные поля
+        <button type="submit" name="action" value="register" class="regiButton">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+    </form>
+</div>
+{% endblock %}

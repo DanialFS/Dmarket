@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block style %}
+
+{% endblock %}
+{% block title %}
+    <title>Корзина DaniyalShop</title>
+{% endblock %}
+{% block content %}
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <div class="cart-container">
+        <div class="cart-header"><h2>Корзина</h2></div>
+        <div class="cart-items">
+            {% for item in cart.items.all %}
+                <div class="cart-item">
+                    <img src="{{ item.product.images.first.image.url }}" alt="{{ item.product.name }}">
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">{{ item.product.name }}</div>
+                        {% if item.product.old_price %}
+                         <div class="cart-item-price" style="color: red;">{{ item.product.price }} &#8376;</div>
+                         <div class="cart-item-old-price"><s>{{ item.product.old_price }} &#8376;</s></div>
+                        {% else %}
+                         <div class="cart-item-price">{{ item.product.price }} &#8376;</div>
+                        {% endif %}
+                    </div>
+                    <form action="{% url 'remove_from_cart' item.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="remove-from-cart" data-item-id="{{ item.id }}">&#10006;</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="cart-summary">
+            <img src="{% static 'img/pays.jpg' %}">
+            <h2>Итого: {{ cart.get_total_price }} &#8376;</h2>
+            <button class="checkout-button" onclick="location.href=''">Оформить</button>
+        </div>
+    </div>
+{% endblock %}

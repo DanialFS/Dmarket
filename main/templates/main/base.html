@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %} {% endblock %}
+    <title></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" type="text/css">
+    <link rel="icon" href="{% static 'img/logo.png' %}">
+</head>
+<body>
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 class="login-text">Личный кабинет</h2>
+        <form id="login-form" method="post">
+        {% csrf_token %}
+        <label for="username">Логин:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+        <label for="remember">Запомнить меня<input type="radio" id="remember" name="remember" value="1"></label>
+        <button type="submit" class="auth" name="action" value="login">ВОЙТИ</button>
+        <div class="links">
+        <a href="{% url 'forgot_password' %}">Забыли пароль? </a>
+        <br>
+        <a href="{% url 'register' %}">Не зарегистрированы?</a>
+        </div>
+</form>
+
+    </div>
+</div>
+
+<div id="searchBox" class="modal" style="width: 70%; margin-top: -10% ">
+    <h2>ПОИСК</h2>
+    <span class="close">&times;</span>
+    <label for="search-input"></label><input type="text" id="search-input" placeholder="Введите название товара">
+    <div id="search-results"></div>
+</div>
+
+<header class="header">
+    <div class="logo-section">
+        <div class="logo"><a href="/"><img src="{% static 'img/favicon.png' %}" alt="Логотип"></a></div>
+        <nav class="navigation">
+            <ul>
+                <li><a href="{% url 'product_list_by_category' 'krossovki' %}">КРОССОВКИ</a></li>
+                <li><a href="{% url 'product_list_by_category' 'kedy' %}">КЕДЫ</a></li>
+                <li><a href="{% url 'product_list_by_category' 'basketbolnye_krossovki' %}">СПОРТИВНАЯ ОБУВЬ</a></li>
+                <li><a href="{% url 'product_list_by_category' 'cloth' %}">ОДЕЖДА</a></li>
+                <li><a href="{% url 'product_list_by_category' 'accessory' %}">АКСЕССУАРЫ</a></li>
+                <li><a href="{% url 'support:support' %}">ПОДДЕРЖКА</a></li>
+                <li><a href="{% url 'wardrobe:wardrobe' %}">ГАРДЕРОБ</a></li>
+            </ul>
+        </nav>
+        <div class="icons">
+            <form action="{% url 'cart_detail' %}" target="_blank">
+            <button><img src="{% static 'img/cart.svg' %}" alt="Корзина"></button>
+            </form>
+            <button id="loginBtn"><img src="{% static 'img/profile.svg' %}" alt="Авторизация"></button>
+            <button id="SearchBtn"><img src="{% static 'img/search.svg' %}" alt="Поиск"></button>
+        </div>
+    </div>
+</header>
+
+{% block content %} {% endblock %}
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+<div class="before-foot">
+    <h4>Найдите то, что вы хотите, в один клик. Всего один клик, не стесняйтесь продолжить</h4>
+    <button id="SearchBtn2"><img src="{% static 'img/search.svg' %}" alt="Поиск"></button>
+    <a href="/"><button><img src="{% static 'img/home.png' %}" alt="Домой"></button></a>
+</div>
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-in-content">
+            <nav class="footer-information">
+                <h3>НАВИГАЦИЯ</h3>
+                <ul>
+                    <li><a href="{% url 'product_list' %}?discount=true">АКЦИИ</a></li>
+                    <li><a href="{% url 'product_list_by_category' 'krossovki' %}">КРОССОВКИ</a></li>
+                    <li><a href="{% url 'product_list_by_category' 'kedy' %}">КЕДЫ</a></li>
+                    <li><a href="{% url 'product_list_by_category' 'basketbolnye_krossovki' %}">СПОРТИВНАЯ ОБУВЬ</a></li>
+                    <li><a href="{% url 'product_list_by_category' 'accessory' %}">АКСЕССУАРЫ</a></li>
+                    <li><a href="{% url 'support:support' %}">ПОМОЩЬ</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="footer-in-content">
+            <nav class="footer-information">
+                <h3>ИНФОРМАЦИЯ</h3>
+                <ul>
+                    <li><a href="{% url 'support:support' %}">FAQ</a></li>
+                    <li><a href={% url 'support:support' %}>ДОСТАВКА</a></li>
+                    <li><a href={% url 'support:support' %}>ОПЛАТА</a></li>
+                    <li><a href={% url 'support:support' %}>ВОЗВРАТ</a></li>
+                    <li><a href="{% url 'pages:contacts' %}">КОНТАКТЫ</a></li>
+                    <li class="no-style"><a href="{% url 'pages:policy' %}">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a></li>
+                    <li class="no-style"><a href="{% url 'pages:agreement' %}">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a></li>
+                    <li class="no-style"><a href="{% url 'pages:offer' %}">ДОГОВОР ОФФЕРТЫ</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="footer-in-content">
+            <nav class="footer-information">
+                <h3>СВЯЗЬ</h3>
+                <ul>
+                    <li><a href="https://t.me/danial0512">+7(707)816-65-45</a></li>
+                    <li><a href="mailto:danial20051225@gmail.com">danialshopkaz@gmail.com</a></li>
+                </ul>
+                <h3>СОЦИАЛЬНЫЕ СЕТИ</h3>
+                <ul class="social-sites">
+                    <li><a href="https://t.me/danial0512"><img src="{% static 'img/telegram.png' %}" alt="fill:white;" class="black-icon"></a></li>
+                    <li><a href="https://youtube.com/@dfs1225"><img src="{% static 'img/youtube.png' %}" alt="Ютуб" class="black-icon"></a></li>
+                    <li><a href="https://wa.me/+77078166535"><img src="{% static 'img/whatsapp.png' %}" alt="Ватсап" class="black-icon"></a></li>
+                    <li><a href="https://www.instagram.com/jaqsylyq.d"><img src="{% static 'img/instagram.png' %}" alt="Инстраграм" class="black-icon"></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function getCsrfToken() {
+            return $('input[name=csrfmiddlewaretoken]').val();
+        }
+
+        function updateCartCount(cartItemCount) {
+            $('#cart-count').text(cartItemCount);
+        }
+
+        function handleSuccess(response) {
+            if (response.status === 'success') {
+                updateCartCount(response.cart_item_count);
+                alert(response.message);
+                location.reload();  // Обновление страницы после успешного удаления
+            } else {
+                alert(response.message);
+            }
+        }
+
+        function handleError(xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('Произошла ошибка. Попробуйте еще раз.');
+        }
+
+        $('.add-to-cart').click(function(e) {
+            e.preventDefault();
+            var productId = $(this).data('product-id');
+            $.ajax({
+                type: 'POST',
+                url: '/cart/add/' + productId + '/',
+                data: {
+                    'csrfmiddlewaretoken': getCsrfToken()
+                },
+                success: handleSuccess,
+                error: handleError
+            });
+        });
+
+        $('.remove-from-cart').click(function(e) {
+            e.preventDefault();
+            var itemId = $(this).data('item-id');
+            console.log('Item ID:', itemId);  // Добавьте эту строку для отладки
+            if (itemId) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/cart/remove/' + itemId + '/',
+                    data: {
+                        'csrfmiddlewaretoken': getCsrfToken()
+                    },
+                    success: handleSuccess,
+                    error: handleError
+                });
+            } else {
+                alert('ID товара отсутствует.');
+            }
+        });
+    });
+    $(document).ready(function() {
+    $('#login-form').submit(function(event) {
+        event.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "login" %}',
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    closeModal(loginModal);
+                    alert('Вы успешно вошли!');
+                } else {
+                    alert(response.error_message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            }
+        });
+    });
+});
+
+
+    var loginModal = document.getElementById('loginModal');
+    var searchBox = document.getElementById('searchBox');
+    var openLoginBtn = document.getElementById('loginBtn');
+    var openSearchBtn = document.getElementById('SearchBtn');
+    var openSearchBtn2 = document.getElementById('SearchBtn2');
+    var closeModalBtns = document.querySelectorAll('.close');
+    var backgroundBlur = document.createElement('div');
+    backgroundBlur.classList.add('background-blur');
+
+    function openModal(modal) {
+        modal.style.display = 'block';
+        document.body.appendChild(backgroundBlur);
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modal) {
+        modal.style.display = 'none';
+        document.body.removeChild(backgroundBlur);
+        document.body.style.overflow = '';
+    }
+
+    openLoginBtn.addEventListener('click', function() {
+        openModal(loginModal);
+    });
+
+    openSearchBtn.addEventListener('click', function() {
+        openModal(searchBox);
+    });
+
+    openSearchBtn2.addEventListener('click', function() {
+        openModal(searchBox);
+    });
+
+    closeModalBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var modal = this.closest('.modal');
+            closeModal(modal);
+        });
+    });
+
+    window.addEventListener('click', function(event) {
+        if (event.target.classList.contains('modal')) {
+            var modal = event.target;
+            closeModal(modal);
+        }
+    });
+
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+
+        if (query) {
+            fetch(`/search/?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    searchResults.innerHTML = '';
+
+                    data.results.forEach(product => {
+                        const item = document.createElement('div');
+                        const link = document.createElement('a');
+                        link.textContent = `${product.name} ${product.price}`;
+                        link.href = `/${product.id}`;
+                        item.appendChild(link);
+                        searchResults.appendChild(item);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        } else {
+            searchResults.innerHTML = '';
+        }
+    });
+</script>
+
+{% block script %} {% endblock %}
+</body>
+</html>
+
